@@ -27,8 +27,15 @@
  *  21 => 'Fizz'
  *
  */
-function getFizzBuzz(/* num */) {
-  throw new Error('Not implemented');
+function getFizzBuzz(num) {
+  let res = '';
+  if (num % 3 === 0) {
+    res += 'Fizz';
+  }
+  if (num % 5 === 0) {
+    res += 'Buzz';
+  }
+  return res || num;
 }
 
 
@@ -43,8 +50,8 @@ function getFizzBuzz(/* num */) {
  *   5  => 120
  *   10 => 3628800
  */
-function getFactorial(/* n */) {
-  throw new Error('Not implemented');
+function getFactorial(n) {
+  return (n === 1) ? 1 : n * getFactorial(n - 1);
 }
 
 
@@ -80,8 +87,8 @@ function getSumBetweenNumbers(n1, n2) {
  *   10,1,1   =>  false
  *   10,10,10 =>  true
  */
-function isTriangle(/* a, b, c */) {
-  throw new Error('Not implemented');
+function isTriangle(a, b, c) {
+  return (a + b > c && a + c > b && b + c > a);
 }
 
 
@@ -117,8 +124,16 @@ function isTriangle(/* a, b, c */) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
+function doRectanglesOverlap(rect1, rect2) {
+  const rect2y1 = rect2.top;
+  const rect2x1 = rect2.left;
+  const rect2x2 = rect2x1 + rect2.width;
+  const rect2y2 = rect2y1 + rect2.height;
+  const rect1y1 = rect1.top;
+  const rect1x1 = rect1.left;
+  const rect1x2 = rect1x1 + rect1.width;
+  const rect1y2 = rect1y1 + rect1.height;
+  return !(rect1x2 < rect2x1 || rect2x2 < rect1x1 || rect1y2 < rect2y1 || rect2y2 < rect1y1);
 }
 
 
@@ -148,8 +163,8 @@ function doRectanglesOverlap(/* rect1, rect2 */) {
  *   { center: { x:0, y:0 }, radius:10 },  { x:10, y:10 }   => false
  *
  */
-function isInsideCircle(/* circle, point */) {
-  throw new Error('Not implemented');
+function isInsideCircle(circle, point) {
+  return (point.x - circle.center.x) ** 2 + (point.y - circle.center.y) ** 2 < circle.radius ** 2;
 }
 
 
@@ -257,8 +272,20 @@ function reverseInteger(num) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  const arrayOfDigits = ccn.toString(10).split('');
+  const sum = arrayOfDigits.reduce((acc, item, index) => {
+    let cardNumber = parseInt(item, 10);
+    if ((arrayOfDigits.length - index) % 2 === 0) {
+      cardNumber *= 2;
+      if (cardNumber > 9) {
+        cardNumber -= 9;
+      }
+    }
+    return acc + cardNumber;
+  }, 0);
+
+  return sum % 10 === 0;
 }
 
 /**
@@ -361,8 +388,17 @@ function toNaryString(num, n) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  const minPath = pathes.reduce((acc, val) => (acc.length <= val.length ? acc : val));
+  let res = '';
+  for (let i = 0; i < minPath.length; i += 1) {
+    if (pathes.every((val) => val.indexOf(minPath[i]) !== -1)) {
+      res += minPath[i];
+    } else {
+      break;
+    }
+  }
+  return res.substring(0, res.lastIndexOf('/') + 1);
 }
 
 
@@ -384,8 +420,9 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  return m1.map((row, i) => m2[0].map((el, j) => row
+    .reduce((acc, curr, n) => acc + m1[i][n] * m2[n][j], 0)));
 }
 
 
@@ -419,8 +456,28 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  let winner;
+  for (let i = 0; i < position.length; i += 1) {
+    if (position[i][0] && position[i][0] === position[i][1] && position[i][1] === position[i][2]) {
+      // eslint-disable-next-line prefer-destructuring
+      winner = position[i][0];
+      break;
+    }
+  }
+  for (let j = 0; j < position[0].length; j += 1) {
+    if (position[0][j] && position[0][j] === position[1][j] && position[1][j] === position[2][j]) {
+      winner = position[0][j];
+      break;
+    }
+  }
+  if (position[1][1]
+    && ((position[0][0] === position[1][1] && position[1][1] === position[2][2])
+    || (position[0][2] === position[1][1] && position[1][1] === position[2][0]))) {
+    // eslint-disable-next-line prefer-destructuring
+    winner = position[1][1];
+  }
+  return winner;
 }
 
 
